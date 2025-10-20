@@ -1,5 +1,6 @@
-
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 class SalutApp {
 
@@ -32,7 +33,7 @@ class SalutApp {
     }
     int mostrarMenu(Scanner scanner) {
         while (true) {
-            System.out.println("--- Menú ---");
+            System.out.println("Menú " );
             System.out.println("1. Introduir dades");
             System.out.println("2. Modificar dades");
             System.out.println("3. Visualitzar dades");
@@ -207,23 +208,19 @@ class SalutApp {
         System.out.println("Any de naixement: " + anyNaixement);
         return 0;
     }
-    String formatarNom(String nom) {
-        String[] parts= nom.split(" ");
-        String resultat= "";
-        for (int i= 0; i < parts.length; i++) {
-            String part= parts[i];
-            if (!part.equals("")) {
-                char primera= part.charAt(0);
-                String resta= "";
-                if (part.length() > 1) {
-                    resta= part.substring(1).toLowerCase();
-                }
-                resultat= resultat + Character.toUpperCase(primera) + resta + " ";
-            }
+  String formatarNom(String nom) {
+    try {
+        if (nom == null) {
+            throw new IllegalArgumentException("El nom no pot ser null");
         }
-        if (resultat.length() > 0 && resultat.charAt(resultat.length() - 1) == ' ') {
-            resultat= resultat.substring(0, resultat.length() - 1);
-        }
-        return resultat;
+        return Arrays.stream(nom.split(" "))
+            .filter(part -> !part.isEmpty())
+            .map(part -> Character.toUpperCase(part.charAt(0)) +
+                    (part.length() > 1 ? part.substring(1).toLowerCase() : ""))
+            .collect(Collectors.joining(" "));
+    } catch (Exception e) {
+        System.err.println("Error al formatar el nom: " + e.getMessage());
+        return ""; 
     }
 }
+    }
